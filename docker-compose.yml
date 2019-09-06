@@ -1,13 +1,11 @@
-version: "2"
+version: "3"
 services:
   node:
-    image: "node:8"
-    user: "node"
-    working_dir: /home/node/app
-    environment:
-      - NODE_ENV=production
+    build: .
     volumes:
-      - ./:/home/node/app
-    expose:
-      - "8081"
-    command: "npm start"
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 3000:3000
+      - 9229:9229
+    command: npm start
