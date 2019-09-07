@@ -1,12 +1,12 @@
 {
-  "name": "challenge",
-  "version": "0.0.1",
-  "description": "Lalamove's backend developer's challenge",
+  "name": "webapp",
+  "version": "0.1.0",
+  "description": "a simple web app for processing orders",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "start:prod": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/app.js",
+    "start:prod": "node src/app.js",
+    "test": "node ./node_modules/selenium-cucumber-js/index.js -x 50000"
   },
   "author": "Sunil Khiatani",
   "license": "ISC",
@@ -14,6 +14,7 @@
     "express": "^4.17.1"
   },
   "devDependencies": {
-    "eslint": "^6.3.0"
+    "chai": "^4.2.0",
+    "selenium-cucumber-js": "^1.7.0"
   }
 }
