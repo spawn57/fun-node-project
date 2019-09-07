@@ -1,7 +1,9 @@
 version: "3"
 services:
   webapp:
-    build: .
+    build:
+      context: . 
+      dockerfile: ./docker/webapp/Dockerfile
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -9,3 +11,7 @@ services:
       - 3000:3000
       - 9229:9229
     command: npm start
+  db:
+    build: ./docker/db
+    ports:
+      - 3306:3306
