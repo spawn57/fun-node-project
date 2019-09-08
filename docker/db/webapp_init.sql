@@ -1,0 +1,7 @@
+ALTER SCHEMA `webapp`  DEFAULT CHARACTER SET utf8 ;
+
+CREATE TABLE `webapp`.`orders` (
+  `uuid` VARCHAR(36) CHARACTER SET 'utf8' NOT NULL,
+  `distance` FLOAT NOT NULL,
+  `status` VARCHAR(45) NOT NULL DEFAULT 'UNASSIGNED',
+  PRIMARY KEY (`uuid`));
