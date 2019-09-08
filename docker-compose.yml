@@ -1,5 +1,13 @@
 version: "3"
 services:
+  db:
+    container_name: db
+    build: 
+      context: .
+      dockerfile: ./docker/db/Dockerfile
+    ports:
+      - 3306:3306
+            
   webapp:
     container_name: webapp
     build:
@@ -12,11 +20,3 @@ services:
       - 3000:3000
       - 9229:9229
     command: npm start
-  db:
-    container_name: db
-    build: 
-      context: .
-      dockerfile: ./docker/db/Dockerfile
-    ports:
-      - 3306:3306
-    
