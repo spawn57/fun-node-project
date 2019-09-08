@@ -1,9 +1,12 @@
 'use strict'
 
-var Order = (order) => {
-    this.uuid = order.uuid;
-    this.distance = order.distance;
-    this.status = order.status;
+var Order = function (uuid, distance, status) {
+  this.uuid = uuid
+  this.distance = distance
+  this.status = status
 }
+
+Order.STATUS_UNASSIGNED = 'UNASSIGNED'
+Order.STATUS_TAKEN = 'TAKEN'
 
 module.exports = Order

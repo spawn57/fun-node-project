@@ -1,8 +1,10 @@
-'use strict';
+'use strict'
 
-module.exports = function(app) {
-    var orders = require('../controllers/orderController');
+module.exports = (app) => {
+  var orders = require('../controllers/orderController')
 
-    app.route('/list')
-        .get(orders.list)
+  app.route('/orders')
+    .post(orders.placeOrder)
+  app.route('/list')
+    .get(orders.list)
 }

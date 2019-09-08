@@ -1,9 +1,8 @@
-const expect = require('chai').expect;
+const expect = require('chai').expect
 
-module.exports = function () {    
-    
+module.exports = function () {
   this.When(/^I load the homepage$/, () => {
-    return helpers.loadPage('http://localhost:3000');
+    return helpers.loadPage('http://localhost:3000')
   })
 
   this.Then(/^I should see Hello World$/, () => {
@@ -20,4 +19,4 @@ module.exports = function () {
       })        
     })
   })
-};
+}
