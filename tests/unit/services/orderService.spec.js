@@ -84,4 +84,28 @@ describe('Order Service', () => {
         })
     })
   })
+
+  describe('update', () => {
+    it('set taken is successfull and returns successful status', (done) => {
+      var numberOfRecordsUpdated = [1]
+      spyOn(database.Orders, 'update').and.returnValue(Promise.resolve(numberOfRecordsUpdated))
+
+      orderService.setTaken(1)
+        .then((status) => {
+          expect(status).toEqual({ status: 'SUCCESS' })
+          done()
+        })
+    })
+
+    it('set taken is fails and no record found when no records are updated', (done) => {
+      var numberOfRecordsUpdated = [0]
+      spyOn(database.Orders, 'update').and.returnValue(Promise.resolve(numberOfRecordsUpdated))
+
+      orderService.setTaken(1)
+        .catch((error) => {
+          expect(error).toEqual(Error('no record found'))
+          done()
+        })
+    })
+  })
 })

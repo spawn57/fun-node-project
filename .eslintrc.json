@@ -2,6 +2,9 @@
     "extends": "standard",
     "globals": {
         "beforeAll": true,
+        "beforeEach": true,
+        "afterAll": true,
+        "afterEach": true,
         "describe": true,
         "fdescribe": true,
         "it": true,

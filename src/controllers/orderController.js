@@ -30,4 +30,25 @@ OrderController.list = (request, response) => {
     })
 }
 
+OrderController.takeOrder = (request, response) => {
+  console.log('taking order for id: ' + request.params.id)
+  var id = Number.parseInt(request.params.id)
+
+  if (isNaN(id)) {
+    response.status(400).send({ error: 'id must be an integer' })
+    return
+  }
+
+  return OrderService.setTaken(id)
+    .then((result) => {
+      console.log('order set to taken')
+      response.send(result)
+    },
+    (error) => {
+      console.log('could take order: ' + id)
+      console.log(error)
+      response.status(400).send({ error: 'order not found' })
+    })
+}
+
 module.exports = OrderController

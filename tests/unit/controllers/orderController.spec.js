@@ -7,8 +7,10 @@ describe('Order Controller', () => {
   var request
   var response
 
-  beforeAll(() => {
-    request = {}
+  beforeEach(() => {
+    request = {
+      params: {}
+    }
     response = jasmine.createSpyObj('response', ['send'])
   })
 
@@ -68,6 +70,18 @@ describe('Order Controller', () => {
       .then(() => {
         expect(OrderService.findAll).toHaveBeenCalled()
         expect(response.send).toHaveBeenCalledWith(Error('unable to fetch data from the database'))
+        done()
+      })
+  })
+
+  it('take order successfully then return success', (done) => {
+    request.params.id = 1
+    spyOn(OrderService, 'setTaken').and.returnValue(Promise.resolve({ status: 'SUCCESS' }))
+
+    OrderController.takeOrder(request, response)
+      .then(() => {
+        expect(OrderService.setTaken).toHaveBeenCalled()
+        expect(response.send).toHaveBeenCalledWith({ status: 'SUCCESS' })
         done()
       })
   })

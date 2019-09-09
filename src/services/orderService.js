@@ -11,7 +11,7 @@ OrderService.create = (order) => {
   })
 }
 
-OrderService.findAll = function (result) {
+OrderService.findAll = (result) => {
   return database.Orders.findAll()
     .then((ordersData) => {
       var orders = []
@@ -22,6 +22,19 @@ OrderService.findAll = function (result) {
 
       return orders
     })
+}
+
+OrderService.setTaken = (id) => {
+  return database.Orders.update(
+    { status: Order.STATUS_TAKEN },
+    { where: { id: id } }
+  ).then((numberOfRowsUpdated) => {
+    if (numberOfRowsUpdated[0] === 0) {
+      return Promise.reject(Error('no record found'))
+    } else {
+      return ({ status: 'SUCCESS' })
+    }
+  })
 }
 
 module.exports = OrderService

@@ -5,6 +5,8 @@ module.exports = (app) => {
 
   app.route('/orders')
     .post(orders.placeOrder)
+  app.route('/orders/:id')
+    .patch(orders.takeOrder)
   app.route('/list')
     .get(orders.list)
 }
