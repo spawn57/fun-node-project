@@ -1,7 +1,7 @@
 'use strict'
 
-var Order = function (uuid, distance, status) {
-  this.uuid = uuid
+var Order = function (id, distance, status) {
+  this.id = id
   this.distance = distance
   this.status = status
 }

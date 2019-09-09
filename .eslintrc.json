@@ -1,3 +1,14 @@
 {
-    "extends": "standard"
+    "extends": "standard",
+    "globals": {
+        "beforeAll": true,
+        "describe": true,
+        "fdescribe": true,
+        "it": true,
+        "fit": true,
+        "expect": true,
+        "spyOn": true,
+        "jasmine": true,
+        "fail": true
+    }
 }

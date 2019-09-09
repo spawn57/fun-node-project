@@ -1,24 +1,27 @@
 'use strict'
-var sql = require('../db')
+const database = require('../database/connection')
+const Order = require('../models/orderModel')
 
-var OrderService = {}
+const OrderService = {}
 
-OrderService.addOrder = (order, result) => {
-  // sql.query('SELECT * FROM orders', function(error, response))
-  console.log('added order... not really')
-  result(null, order.uuid)
+OrderService.create = (order) => {
+  return database.Orders.create({
+    distance: order.distance,
+    status: order.status
+  })
 }
 
 OrderService.findAll = function (result) {
-  sql.query('SELECT * FROM orders', (error, response) => {
-    if (error) {
-      console.log('error: ', error)
-      result(null, error)
-    } else {
-      console.log('order: ', response)
-      result(null, response)
-    }
-  })
+  return database.Orders.findAll()
+    .then((ordersData) => {
+      var orders = []
+      for (var o of ordersData) {
+        var order = new Order(o.id, o.distance, o.status)
+        orders.push(order)
+      }
+
+      return orders
+    })
 }
 
 module.exports = OrderService
