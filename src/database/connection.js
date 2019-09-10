@@ -2,7 +2,7 @@
 var Sequelize = require('sequelize')
 
 const database = new Sequelize('webapp', 'order_user', 'order_user_baby', {
-  host: '172.19.0.2',
+  host: 'db',
   dialect: 'mysql',
   pool: {
     max: 5,

@@ -5,18 +5,21 @@ services:
     build: 
       context: .
       dockerfile: ./docker/db/Dockerfile
+    command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_general_ci']
     ports:
       - 3306:3306
-            
+    
   webapp:
     container_name: webapp
     build:
       context: . 
       dockerfile: ./docker/webapp/Dockerfile
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
+    command: npm start
+    depends_on: 
+      - db
     ports:
       - 3000:3000
       - 9229:9229
-    command: npm start
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
