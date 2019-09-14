@@ -9,8 +9,10 @@
     "stop:db": "docker stop db",
     "start:prod": "node src/app.js",
     "test": "node ./node_modules/selenium-cucumber-js/index.js -x 50000",
-    "unit-tests": "./node_modules/jasmine/bin/jasmine.js --config=tests/support/jasmine.json",
-    "unit-tests:debug": "node --inspect-brk ./node_modules/jasmine/bin/jasmine.js --config=tests/support/jasmine.json"
+    "test:unit": "./node_modules/jasmine/bin/jasmine.js --config=tests/support/jasmine.json",
+    "test:unit:debug": "node --inspect-brk ./node_modules/jasmine/bin/jasmine.js --config=tests/support/jasmine.json",
+    "test:integration": "node ./node_modules/.bin/cucumber-js",
+    "test:integration:debug": "node --inspect-brk ./node_modules/.bin/cucumber-js"
   },
   "author": "Sunil Khiatani",
   "license": "ISC",
@@ -23,6 +25,7 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "cucumber": "^5.1.0",
     "eslint": "^6.3.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-import": "^2.18.2",
@@ -30,7 +33,6 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "jasmine": "^3.4.0",
-    "nodemon": "^1.19.2",
-    "selenium-cucumber-js": "^1.7.0"
+    "nodemon": "^1.19.2"
   }
 }

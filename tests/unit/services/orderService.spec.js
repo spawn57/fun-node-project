@@ -11,7 +11,7 @@ describe('Order Service', () => {
     it('add Order successfully then return updated Order', (done) => {
       var mockOrder = {
         id: 1,
-        distance: 1,
+        distance: 200,
         status: 'UNASSIGNED',
         createdAt: '2019-09-09T12:00:50.000Z',
         updatedAt: '2019-09-09T12:00:50.000Z'
@@ -24,8 +24,10 @@ describe('Order Service', () => {
           expect(database.Orders.create).toHaveBeenCalled()
           expect(order).toEqual(jasmine.objectContaining({
             id: 1,
-            distance: 1,
-            status: 'UNASSIGNED'
+            distance: 200,
+            status: 'UNASSIGNED',
+            createdAt: '2019-09-09T12:00:50.000Z',
+            updatedAt: '2019-09-09T12:00:50.000Z'
           }))
           done()
         })

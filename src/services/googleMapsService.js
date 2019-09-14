@@ -22,10 +22,10 @@ GoogleMapsService.calculateDistance = (startLatitude, startLongitude, endLatitud
       if (response.data.status === 'OK') {
         return response.data.rows[0].elements[0].distance.value
       } else {
-        throw Error('failed to determine distance')
+        Promise.reject(Error('failed to determine distance'))
       }
     } catch (error) {
-      throw Error('failed to determine distance')
+      Promise.reject(Error('failed to determine distance'))
     }
   })
 }

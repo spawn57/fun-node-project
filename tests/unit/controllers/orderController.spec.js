@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 var OrderController = require('../../../src/controllers/orderController')
 var OrderService = require('../../../src/services/orderService')
 var GoogleMapService = require('../../../src/services/googleMapsService')
@@ -9,7 +9,8 @@ describe('Order Controller', () => {
 
   beforeEach(() => {
     request = {
-      params: {}
+      params: {},
+      body: {}
     }
     response = jasmine.createSpyObj('response', ['send'])
   })
@@ -25,11 +26,19 @@ describe('Order Controller', () => {
       distance: mockDistance,
       status: 'UNASSIGNED'
     }
-    spyOn(GoogleMapService, 'calculateDistance').and.returnValue(mockDistance)
-    spyOn(OrderService, 'create').and.returnValue(Promise.resolve(mockData))
+    spyOn(GoogleMapService, 'calculateDistance')
+      .and.returnValue(Promise.resolve(mockDistance))
+    spyOn(OrderService, 'create')
+      .and.returnValue(Promise.resolve(mockData))
 
+    request.body = {
+      origin: ['22.314383', '114.172100'],
+      destination: ['22.300367', '114.156597']
+    }
     OrderController.placeOrder(request, response)
       .then(() => {
+        expect(GoogleMapService.calculateDistance)
+          .toHaveBeenCalledWith(22.314383, 114.172100, 22.300367, 114.156597)
         expect(OrderService.create).toHaveBeenCalled()
         expect(response.send).toHaveBeenCalledWith(mockData)
         done()

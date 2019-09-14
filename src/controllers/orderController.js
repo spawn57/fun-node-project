@@ -1,22 +1,37 @@
 'use strict'
 
-var GoogleMapsService = require('../services/googleMapsService')
-var Order = require('../models/orderModel')
-var OrderService = require('../services/orderService')
+const GoogleMapsService = require('../services/googleMapsService')
+const Order = require('../models/orderModel')
+const OrderService = require('../services/orderService')
+const util = require('util')
+const extraUtil = require('../util/extraUtil')
 
 var OrderController = {}
 
 OrderController.placeOrder = (request, response) => {
+  var startLatitude, startLogitude, endLatitude, endLongitude
+  try {
+    console.log('parsing new order')
+    startLatitude = extraUtil.parseFloat(request.body.origin[0])
+    startLogitude = extraUtil.parseFloat(request.body.origin[1])
+    endLatitude = extraUtil.parseFloat(request.body.destination[0])
+    endLongitude = extraUtil.parseFloat(request.body.destination[1])
+  } catch (error) {
+    response.status(400).send(error)
+  }
   console.log('calculating distance')
-  var distance = GoogleMapsService.calculateDistance()
-  console.log('adding order')
-  var order = new Order(null, distance, Order.STATUS_UNASSIGNED)
-  return OrderService.create(order)
-    .then((order) => {
-      response.send(order)
-    })
-    .catch((error) => {
-      response.send(new Error('unable to create new order', error))
+  return GoogleMapsService.calculateDistance(startLatitude, startLogitude, endLatitude, endLongitude)
+    .then((distance) => {
+      console.log('adding order')
+      var order = new Order(null, distance, Order.STATUS_UNASSIGNED)
+      return OrderService.create(order)
+        .then((order) => {
+          console.log(util.format('order added successfully with id %d', order.id))
+          response.send(order)
+        })
+        .catch((error) => {
+          response.status(400).send(new Error('unable to create new order', error))
+        })
     })
 }
 

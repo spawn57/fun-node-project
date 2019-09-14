@@ -7,7 +7,7 @@ describe('Google Map Service', () => {
   })
 
   describe('calculateDistance returns successful result', () => {
-    fit('test calculate distance returns 1', (done) => {
+    it('test calculate distance returns 1', (done) => {
       const mockResponse = {
         data: {
           destination_addresses: [
