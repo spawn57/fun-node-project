@@ -71,23 +71,27 @@ OrderController.list = (request, response) => {
 }
 
 OrderController.takeOrder = (request, response) => {
-  logger.info(util.format('taking order for id: %s', request.query.id))
-  var id = Number.parseInt(request.query.id)
-
+  logger.info(util.format('taking order for id: %s', request.params.id))
+  var id = Number.parseInt(request.params.id)
   if (isNaN(id)) {
     logger.error('id %s must be an integer', id)
     response.status(400).send({ error: 'id must be an integer' })
     return
   }
 
+  if (request.body.status !== Order.STATUS_TAKEN) {
+    response.status(400).send({ error: 'order requested to be said to invalid status' })
+    return
+  }
+
   return OrderService.setTaken(id)
-    .then((result) => {
-      logger.info('order set to taken')
-      response.send(result)
+    .then((order) => {
+      logger.info(util.format('order with {int} set to taken', id))
+      response.send({ status: 'SUCCESS' })
     },
     (error) => {
       logger.error(util.format('could take order: %d: %s', id, error))
-      response.status(400).send({ error: 'order not found' })
+      response.status(400).send({ error: error.message })
     })
 }
 

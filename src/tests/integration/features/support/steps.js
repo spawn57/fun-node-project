@@ -66,3 +66,37 @@ Then('my new order should be there', () => {
   }
   chai.expect(scope.response.data).to.deep.include.members([order])
 })
+
+Given('an order exists with id {int} and status UNASSIGNED', (int) => {
+  return connection.Orders.findOrCreate(
+    {
+      where: {
+        id: 1
+      },
+      defaults: {
+        distance: 100,
+        status: 'UNASSIGNED'
+      }
+    })
+    .then(([order]) => {
+      order.status = 'UNASSIGNED'
+      return order.save()
+    })
+    .then((order) => {
+      scope.order = order
+    })
+})
+
+When('I send a patch request with id {int} and status TAKEN', (id) => {
+  return axios.patch('http://localhost:3000/orders/' + id, {
+    status: 'TAKEN'
+  })
+    .then((response) => {
+      scope.response = response
+      chai.expect(response.status).to.eql(200)
+    })
+})
+
+Then('the status should be SUCCESS', () => {
+  chai.expect(scope.response.data).to.eql({ status: 'SUCCESS' })
+})

@@ -35,16 +35,24 @@ OrderService.findAll = (
 }
 
 OrderService.setTaken = (id) => {
-  return database.Orders.update(
+  return database.Orders.findAll(
     { status: Order.STATUS_TAKEN },
     { where: { id: id } }
-  ).then((numberOfRowsUpdated) => {
-    if (numberOfRowsUpdated[0] === 0) {
-      return Promise.reject(Error('no record found'))
+  ).then((orders) => {
+    if (orders.length === 0) {
+      return Promise.reject(Error('order not found'))
     } else {
-      return ({ status: 'SUCCESS' })
+      if (orders[0].status === Order.STATUS_UNASSIGNED) {
+        orders[0].status = Order.STATUS_TAKEN
+        return orders[0].save()
+      } else {
+        return Promise.reject(Error('order has already been assigned'))
+      }
     }
   })
+    .then((order) => {
+      return new Order(order.id, order.distance, order.status)
+    })
 }
 
 module.exports = OrderService

@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node src/app/server.js",
+    "start:debug": "node --inspect-brk src/app/server.js",
     "start:db": "docker start db",
     "stop:db": "docker stop db",
     "start:prod": "node src/app/server.js",

@@ -114,23 +114,54 @@ describe('Order Service', () => {
 
   describe('update', () => {
     it('set taken is successfull and returns successful status', (done) => {
-      var numberOfRecordsUpdated = [1]
-      spyOn(database.Orders, 'update').and.returnValue(Promise.resolve(numberOfRecordsUpdated))
+      var mockData = {
+        id: 3,
+        distance: 3,
+        status: 'UNASSIGNED',
+        createdAt: '2019-09-09T12:00:50.000Z',
+        updatedAt: '2019-09-09T12:00:50.000Z',
+        save: () => {}
+      }
+      spyOn(mockData, 'save').and.returnValue(Promise.resolve(mockData))
+      spyOn(database.Orders, 'findAll').and.returnValue(Promise.resolve([mockData]))
 
-      orderService.setTaken(1)
-        .then((status) => {
-          expect(status).toEqual({ status: 'SUCCESS' })
+      orderService.setTaken(3)
+        .then((order) => {
+          expect(order.status).toEqual(Order.STATUS_TAKEN)
           done()
         })
     })
 
-    it('set taken is fails and no record found when no records are updated', (done) => {
-      var numberOfRecordsUpdated = [0]
-      spyOn(database.Orders, 'update').and.returnValue(Promise.resolve(numberOfRecordsUpdated))
+    it('set an taken order when order is already taken then throw error', (done) => {
+      var mockData = {
+        id: 3,
+        distance: 3,
+        status: 'TAKEN',
+        createdAt: '2019-09-09T12:00:50.000Z',
+        updatedAt: '2019-09-09T12:00:50.000Z',
+        save: () => { }
+      }
+      spyOn(database.Orders, 'findAll').and.returnValue(Promise.resolve([mockData]))
+
+      orderService.setTaken(3)
+        .then(() => {
+          fail()
+        })
+        .catch((error) => {
+          expect(error).toEqual(Error('order has already been assigned'))
+          done()
+        })
+    })
+
+    it('set taken is fails and no record found when no records are found', (done) => {
+      spyOn(database.Orders, 'findAll').and.returnValue(Promise.resolve([]))
 
       orderService.setTaken(1)
+        .then(() => {
+          fail()
+        })
         .catch((error) => {
-          expect(error).toEqual(Error('no record found'))
+          expect(error).toEqual(Error('order not found'))
           done()
         })
     })
