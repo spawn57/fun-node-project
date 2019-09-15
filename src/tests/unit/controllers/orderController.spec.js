@@ -9,10 +9,12 @@ describe('Order Controller', () => {
 
   beforeEach(() => {
     request = {
-      params: {},
+      query: {},
       body: {}
     }
-    response = jasmine.createSpyObj('response', ['send'])
+    response = {}
+    response.send = jasmine.createSpy('send').and.returnValue(response)
+    response.status = jasmine.createSpy('status').and.returnValue(response)
   })
 
   it('test constructor', () => {
@@ -40,7 +42,7 @@ describe('Order Controller', () => {
         expect(GoogleMapService.calculateDistance)
           .toHaveBeenCalledWith(22.314383, 114.172100, 22.300367, 114.156597)
         expect(OrderService.create).toHaveBeenCalled()
-        expect(response.send).toHaveBeenCalledWith(mockData)
+        expect(response.send).toHaveBeenCalledWith(jasmine.objectContaining(mockData))
         done()
       })
   })
@@ -73,6 +75,28 @@ describe('Order Controller', () => {
       })
   })
 
+  it('list order returns successful response with list of orders when page is 2 and page size is 2', (done) => {
+    request.query = {
+      page: 2,
+      limit: 2
+    }
+    var mockData = [
+      {
+        id: 3,
+        distance: 43,
+        status: 'TAKEN'
+      }
+    ]
+    spyOn(OrderService, 'findAll').and.returnValue(Promise.resolve(mockData))
+
+    OrderController.list(request, response)
+      .then(() => {
+        expect(OrderService.findAll).toHaveBeenCalledWith(2, 2)
+        expect(response.send).toHaveBeenCalledWith(mockData)
+        done()
+      })
+  })
+
   it('list order throws an error', (done) => {
     spyOn(OrderService, 'findAll').and.returnValue(Promise.reject(Error('database failed')))
     OrderController.list(request, response)
@@ -83,8 +107,36 @@ describe('Order Controller', () => {
       })
   })
 
+  it('list order throws an error when page is not an integer', () => {
+    request.query = {
+      page: 'hello',
+      limit: 2
+    }
+
+    spyOn(OrderService, 'findAll')
+    OrderController.list(request, response)
+
+    expect(OrderService.findAll).not.toHaveBeenCalled()
+    expect(response.send).toHaveBeenCalledWith({ error: 'failed to parse query parameters' })
+  })
+
+  it('list order throws an error when limit is not an integer', () => {
+    request.query = {
+      page: 3,
+      limit: {
+        hello: 'world'
+      }
+    }
+
+    spyOn(OrderService, 'findAll')
+    OrderController.list(request, response)
+
+    expect(OrderService.findAll).not.toHaveBeenCalled()
+    expect(response.send).toHaveBeenCalledWith({ error: 'failed to parse query parameters' })
+  })
+
   it('take order successfully then return success', (done) => {
-    request.params.id = 1
+    request.query.id = 1
     spyOn(OrderService, 'setTaken').and.returnValue(Promise.resolve({ status: 'SUCCESS' }))
 
     OrderController.takeOrder(request, response)

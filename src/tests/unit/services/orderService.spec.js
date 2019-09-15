@@ -85,6 +85,31 @@ describe('Order Service', () => {
           done()
         })
     })
+
+    it('find all is successful then returns a list of orders when page is set to 2 and limit to 2 per page', (done) => {
+      var mockData = [
+        {
+          id: 3,
+          distance: 3,
+          status: 'UNASSIGNED',
+          createdAt: '2019-09-09T12:00:50.000Z',
+          updatedAt: '2019-09-09T12:00:50.000Z'
+        }
+      ]
+      spyOn(database.Orders, 'findAll').and.returnValue(Promise.resolve(mockData))
+
+      orderService.findAll(2, 2)
+        .then((orders) => {
+          expect(database.Orders.findAll).toHaveBeenCalledWith({ offset: 2, limit: 2, order: [['createdAt', 'DESC']] })
+          expect(orders.length).toEqual(1)
+          expect(orders[0]).toEqual(jasmine.objectContaining({
+            id: 3,
+            distance: 3,
+            status: 'UNASSIGNED'
+          }))
+          done()
+        })
+    })
   })
 
   describe('update', () => {

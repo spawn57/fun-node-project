@@ -3,6 +3,8 @@ const database = require('../database/connection')
 const Order = require('../models/orderModel')
 
 const OrderService = {}
+OrderService.DEFAULT_PAGE = 0
+OrderService.DEFAULT_PAGE_SIZE = 10
 
 OrderService.create = (order) => {
   return database.Orders.create({
@@ -11,8 +13,16 @@ OrderService.create = (order) => {
   })
 }
 
-OrderService.findAll = (result) => {
-  return database.Orders.findAll()
+OrderService.findAll = (
+  page = OrderService.DEFAULT_PAGE,
+  limit = OrderService.DEFAULT_PAGE_SIZE) => {
+  return database.Orders.findAll({
+    offset: page,
+    limit: limit,
+    order: [
+      ['createdAt', 'DESC']
+    ]
+  })
     .then((ordersData) => {
       var orders = []
       for (var o of ordersData) {

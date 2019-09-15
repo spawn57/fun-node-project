@@ -34,7 +34,7 @@ OrderController.placeOrder = (request, response) => {
       return OrderService.create(order)
         .then((order) => {
           logger.info(util.format('order added successfully with id %d', order.id))
-          response.send(order)
+          response.send(new Order(order.id, order.distance, order.status))
         })
         .catch((error) => {
           logger.error('unable to create order: %s', error)
@@ -44,7 +44,23 @@ OrderController.placeOrder = (request, response) => {
 }
 
 OrderController.list = (request, response) => {
-  return OrderService.findAll()
+  var page = OrderService.DEFAULT_PAGE
+  var limit = OrderService.DEFAULT_PAGE_SIZE
+  try {
+    logger.info(util.format('received list request: %s', request))
+    if (request.query.page) {
+      page = extraUtil.parseInteger(request.query.page)
+    }
+    if (request.query.limit) {
+      limit = extraUtil.parseInteger(request.query.limit)
+    }
+  } catch (error) {
+    logger.error('failed to parse query parameters: %s and %s', request.query.page, request.query.limit)
+    response.status(400).send({ error: 'failed to parse query parameters' })
+    return
+  }
+  logger.info(util.format('query database for page %d and offset %d', page, limit))
+  return OrderService.findAll(page, limit)
     .then((orders) => {
       response.send(orders)
     })
@@ -55,8 +71,8 @@ OrderController.list = (request, response) => {
 }
 
 OrderController.takeOrder = (request, response) => {
-  logger.info(util.format('taking order for id: %s', request.params.id))
-  var id = Number.parseInt(request.params.id)
+  logger.info(util.format('taking order for id: %s', request.query.id))
+  var id = Number.parseInt(request.query.id)
 
   if (isNaN(id)) {
     logger.error('id %s must be an integer', id)
