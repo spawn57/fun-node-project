@@ -1,7 +1,7 @@
 'use strict'
-var OrderController = require('../../../src/controllers/orderController')
-var OrderService = require('../../../src/services/orderService')
-var GoogleMapService = require('../../../src/services/googleMapsService')
+var OrderController = require('../../../app/controllers/orderController')
+var OrderService = require('../../../app/services/orderService')
+var GoogleMapService = require('../../../app/services/googleMapsService')
 
 describe('Order Controller', () => {
   var request
@@ -78,7 +78,7 @@ describe('Order Controller', () => {
     OrderController.list(request, response)
       .then(() => {
         expect(OrderService.findAll).toHaveBeenCalled()
-        expect(response.send).toHaveBeenCalledWith(Error('unable to fetch data from the database'))
+        expect(response.send).toHaveBeenCalledWith({ error: 'unable to fetch data from the database' })
         done()
       })
   })

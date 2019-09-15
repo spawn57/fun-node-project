@@ -2,7 +2,7 @@
 
 const axios = require('axios')
 const util = require('util')
-const logger = require('../services/logService')
+const logger = require('./logService')
 
 const API_KEY = 'AIzaSyBQkQMNtW-UZaKANxkoAYbGi8vdxdQV7Zg'
 const ENDPOINT = 'https://maps.googleapis.com/maps/api/distancematrix/json'

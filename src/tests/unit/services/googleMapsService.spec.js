@@ -1,4 +1,6 @@
-const googleMapsService = require('../../../src/services/googleMapsService');
+'use strict'
+
+const googleMapsService = require('../../../app/services/googleMapsService')
 const axios = require('axios')
 
 describe('Google Map Service', () => {

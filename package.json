@@ -1,18 +1,18 @@
 {
   "name": "webapp",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "a simple web app for processing orders",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
-    "start": "node src/app.js",
+    "start": "node src/app/server.js",
     "start:db": "docker start db",
     "stop:db": "docker stop db",
-    "start:prod": "node src/app.js",
-    "test": "node ./node_modules/selenium-cucumber-js/index.js -x 50000",
-    "test:unit": "./node_modules/jasmine/bin/jasmine.js --config=tests/support/jasmine.json",
-    "test:unit:debug": "node --inspect-brk ./node_modules/jasmine/bin/jasmine.js --config=tests/support/jasmine.json",
-    "test:integration": "node ./node_modules/.bin/cucumber-js",
-    "test:integration:debug": "node --inspect-brk ./node_modules/.bin/cucumber-js"
+    "start:prod": "node src/app/server.js",
+    "test": "npm run test:unit && npm run test:integration",
+    "test:unit": "./node_modules/jasmine/bin/jasmine.js --config=src/tests/support/jasmine.json",
+    "test:unit:debug": "node --inspect-brk ./node_modules/jasmine/bin/jasmine.js --config=src/tests/support/jasmine.json",
+    "test:integration": "node ./node_modules/.bin/cucumber-js src/tests/integration/features/**/*.feature",
+    "test:integration:debug": "node --inspect-brk ./node_modules/.bin/cucumber-js src/tests/integration/features/**/*.feature"
   },
   "author": "Sunil Khiatani",
   "license": "ISC",

@@ -1,6 +1,6 @@
-var orderService = require('../../../src/services/orderService')
-var database = require('../../../src/database/connection')
-var Order = require('../../../src/models/orderModel')
+var orderService = require('../../../app/services/orderService')
+var database = require('../../../app/database/connection')
+var Order = require('../../../app/models/orderModel')
 
 describe('Order Service', () => {
   it('test constructor', () => {

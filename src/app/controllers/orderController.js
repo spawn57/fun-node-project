@@ -21,12 +21,12 @@ OrderController.placeOrder = (request, response) => {
     logger.error('failed to parse coordinates: %s', error)
     response.status(400).send({ error: 'failed to parse coordinates' })
   }
-  logger.info(
+  logger.info(util.format(
     'calculating distance using google api with orign [%d, %d], desination [%d, %d]',
     startLatitude,
     startLogitude,
     endLatitude,
-    endLongitude)
+    endLongitude))
   return GoogleMapsService.calculateDistance(startLatitude, startLogitude, endLatitude, endLongitude)
     .then((distance) => {
       logger.info('adding order')
