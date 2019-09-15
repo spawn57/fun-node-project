@@ -4,5 +4,19 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"sqltools.connections": [
+			{
+				"askForPassword": false,
+				"connectionTimeout": 30,
+				"database": "orders",
+				"dialect": "MySQL",
+				"name": "docker mysql",
+				"password": "mysecret",
+				"port": 3306,
+				"server": "127.0.0.1",
+				"username": "root"
+			}
+		]
+	}
 }

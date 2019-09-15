@@ -1,33 +1,30 @@
 'use strict'
 
-console.log('initializing')
 const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
+const util = require('util')
 const port = process.env.PORT || 3000
+const logger = require('./services/logService')
 
-console.log('connecting and setting up database')
+logger.info('connecting and setting up database')
 const database = require('./database/connection')
-console.log('database connection and setup successful')
 database.Orders
   .sync({ force: true })
-  // .then(() => {
-  //   database.Orders.create({
-  //     distance: 1,
-  //     status: 'UNASSIGNED'
-  //   }).then((order) => {
-  //     console.log('created entry')
-  //     console.log(order)
-  //   })
-  // })
+  .then(() => {
+    logger.info('database connection and setup successful')
+  })
+  .catch((error) => {
+    logger.error(util.format('failed to connect to database: %s', error))
+  })
 
-console.log('setting up routes')
+logger.info('setting up routes')
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
-var routes = require('./routes/orderRoutes')
+const routes = require('./routes/orderRoutes')
 routes(app)
 app.get('/', (req, res) => res.send('<div id="greeting">Hello World</div>'))
 app.listen(port, () => {
-  console.log('Example app listening on port 3000')
+  logger.info(util.format('Example app listening on port %d', port))
 })
-console.log('routes registered')
+logger.info('routes registered')
