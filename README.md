@@ -17,3 +17,4 @@ run the commands:
 npm install
 node ./node_modules/selenium-cucumber-js/index.js -x 50000
 
+you can import the postman collection to test the api
