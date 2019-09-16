@@ -1,9 +1,21 @@
-# Starting the containers
-Start the projects run the script
+# Building the containers
+Build the docker containers usining the following command
 
-`./start_sh`
+`./start.sh`
 
-it may fail to start properly the first time round 
+start the database by running the command, The database will take some time to start up 
+
+`docker start db`
+
+once it is started, run the command to start the web app.  Do configure the webapp in the configuration section before running the command.
+
+`docker start webapp`
+
+the api should now be ready to use, you can see the list by going to following URL
+
+http://localhost:8080/orders?page=0&limit=5
+
+Note the a postman collection is added to the project, the relevant section below
 
 # Configuration
 
@@ -17,29 +29,21 @@ update the config.json in the app directory with the ip address of the database 
 ## Google Maps API key
 update the config.json with your google api key
 
-## Start database container
-run the command to start the database container
-
-`docker start db`
-
-## Start the web app container
-run the command to start the webapp.  Do make sure the database is up and running
-
-`docker start webapp`
-
 # Development tools
 be sure to have nodejs and npm installed locally to do these tasks.
 
-# Postman 
+## Postman 
 If you use postman, be sure to import the Postman collection file stored in the project root. 
 
 ## Running the app locally
 be sure to only have the database container running by running the following commands
 
 `npm start:db`
+
 `npm start`
 
 To run in debug mode run
+
 `npm start:debug` 
 
 ## Logging

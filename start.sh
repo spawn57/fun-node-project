@@ -1,9 +1,5 @@
 #!/bin/bash
 
 echo "creating docker images:"
-docker-compose -f "docker-compose.yml" up -d --build
+docker-compose -f "docker-compose.yml" up --build --no-start
 
-echo "waiting for database"
-chmod +x ./docker/db/wait-for-it.sh
-
-echo "run init-db to initialize the database"
