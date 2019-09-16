@@ -3,8 +3,8 @@
 const axios = require('axios')
 const util = require('util')
 const logger = require('./logService')
+const config = require('../config.json')
 
-const API_KEY = 'AIzaSyBQkQMNtW-UZaKANxkoAYbGi8vdxdQV7Zg'
 const ENDPOINT = 'https://maps.googleapis.com/maps/api/distancematrix/json'
 const MODE_DRIVING = 'driving'
 
@@ -17,7 +17,7 @@ GoogleMapsService.calculateDistance = (startLatitude, startLongitude, endLatitud
       mode: MODE_DRIVING,
       origins: util.format('%d,%d', startLatitude, startLongitude),
       destinations: util.format('%d,%d', endLatitude, endLongitude),
-      key: API_KEY
+      key: config.googleMaps.key
     }
   }).then((response) => {
     logger.info(util.format('received response: %s', response.data))
@@ -28,11 +28,11 @@ GoogleMapsService.calculateDistance = (startLatitude, startLongitude, endLatitud
         return distance
       } else {
         logger.error('failed to determine distance')
-        Promise.reject(Error('failed to determine distance'))
+        throw Error('failed to determine distance')
       }
     } catch (error) {
       logger.error(util.format('failed to determine distance: %s', error))
-      Promise.reject(Error('failed to determine distance'))
+      throw Error('failed to determine distance')
     }
   })
 }

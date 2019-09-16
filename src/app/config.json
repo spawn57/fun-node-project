@@ -1,0 +1,11 @@
+{
+    "database": {
+        "host": "172.18.0.2",
+        "name": "webapp",
+        "username": "order_user",
+        "password": "order_user_baby"
+    },
+    "googleMaps": {
+        "key": "your-google-api-key-here"
+    }   
+}

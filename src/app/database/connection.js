@@ -1,15 +1,19 @@
 'user strict'
-var Sequelize = require('sequelize')
+const Sequelize = require('sequelize')
+const config = require('../config.json')
 
-const database = new Sequelize('webapp', 'order_user', 'order_user_baby', {
-  host: 'db',
-  dialect: 'mysql',
-  pool: {
-    max: 5,
-    min: 0,
-    idle: 10000
-  }
-})
+const database = new Sequelize(
+  config.database.name,
+  config.database.username,
+  config.database.password, {
+    host: config.database.host,
+    dialect: 'mysql',
+    pool: {
+      max: 5,
+      min: 0,
+      idle: 10000
+    }
+  })
 
 database.Orders = database.import('order.js')
 

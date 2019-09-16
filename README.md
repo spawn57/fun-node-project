@@ -1,20 +1,67 @@
+# Starting the containers
 Start the projects run the script
 
-./start_sh
+`./start_sh`
 
-it will fail to start properly the first time round. 
-you'll need to find the ip of the database docker, and add an entry to your host file
+it may fail to start properly the first time round 
 
-<ip of db container> db
+# Configuration
 
-once that happens run ./start_sh to start the dockers
+## Database
+you'll need to find the ip of the database docker using node-inspect by using the command
 
-to run the tests run the command
+`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' db`
 
-To run the integration tests, you must have npm and node locally
+update the config.json in the app directory with the ip address of the database docker
 
-run the commands:
-npm install
-node ./node_modules/selenium-cucumber-js/index.js -x 50000
+## Google Maps API key
+update the config.json with your google api key
 
-you can import the postman collection to test the api
+## Start database container
+run the command to start the database container
+
+`docker start db`
+
+## Start the web app container
+run the command to start the webapp.  Do make sure the database is up and running
+
+`docker start webapp`
+
+# Development tools
+be sure to have nodejs and npm installed locally to do these tasks.
+
+# Postman 
+If you use postman, be sure to import the Postman collection file stored in the project root. 
+
+## Running the app locally
+be sure to only have the database container running by running the following commands
+
+`npm start:db`
+`npm start`
+
+To run in debug mode run
+`npm start:debug` 
+
+## Logging
+logging is stored in the file application.log
+
+## Tests
+To run the tests locally,   Note that to run the integration test, the container or an instance of the node application needs to be running
+
+to run the tests run the command:
+
+`npm run test`
+
+to run just the unit tests run:
+
+`npm run test:unit`
+
+to run just the integration tests, be sure to have the container running
+
+`npm run test:integration`
+
+to run the unit or integration test in debug mode, run the command
+
+`npm run test:unit:debug`
+
+`npm run test:integration:debug`

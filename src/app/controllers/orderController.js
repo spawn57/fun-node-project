@@ -31,16 +31,18 @@ OrderController.placeOrder = (request, response) => {
   return GoogleMapsService.calculateDistance(startLatitude, startLogitude, endLatitude, endLongitude)
     .then((distance) => {
       logger.info('adding order')
-      var order = new Order(null, distance, Order.STATUS_UNASSIGNED)
+      return new Order(null, distance, Order.STATUS_UNASSIGNED)
+    })
+    .then((order) => {
       return OrderService.create(order)
-        .then((order) => {
-          logger.info(util.format('order added successfully with id %d', order.id))
-          response.send(new Order(order.id, order.distance, order.status))
-        })
-        .catch((error) => {
-          logger.error('unable to create order: %s', error)
-          response.status(400).send({ error: 'unable to create new order' })
-        })
+    })
+    .then((order) => {
+      logger.info(util.format('order added successfully with id %d', order.id))
+      response.send(new Order(order.id, order.distance, order.status))
+    })
+    .catch((error) => {
+      logger.error('unable to create order: %s', error)
+      response.status(400).send({ error: 'unable to create new order' })
     })
 }
 
