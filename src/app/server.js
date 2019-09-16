@@ -4,7 +4,7 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const util = require('util')
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 8080
 const logger = require('./services/logService')
 
 logger.info('connecting and setting up database')

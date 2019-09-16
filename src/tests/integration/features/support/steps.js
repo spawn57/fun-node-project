@@ -13,7 +13,7 @@ When('I post a request with origin coordinates {string},{string} and destination
 })
 
 Then('the place order request should be successful', () => {
-  return axios.post('http://localhost:3000/orders', this.requestData)
+  return axios.post('http://localhost:8080/orders', this.requestData)
     .then((response) => {
       scope.response = response
       chai.expect(response.status).to.eql(200)
@@ -42,7 +42,7 @@ Given('the latest order', () => {
 })
 
 When('I make a request for the list of orders', () => {
-  return axios.get('http://localhost:3000/orders', {
+  return axios.get('http://localhost:8080/orders', {
     params: {
       page: 0,
       limit: 5
@@ -88,7 +88,7 @@ Given('an order exists with id {int} and status UNASSIGNED', (int) => {
 })
 
 When('I send a patch request with id {int} and status TAKEN', (id) => {
-  return axios.patch('http://localhost:3000/orders/' + id, {
+  return axios.patch('http://localhost:8080/orders/' + id, {
     status: 'TAKEN'
   })
     .then((response) => {
@@ -105,7 +105,7 @@ When('I send two patch requests with id {int} and status TAKEN', (id) => {
   var promises = []
   for (var i = 0; i < 2; i++) {
     promises.push(
-      axios.patch('http://localhost:3000/orders/' + id, {
+      axios.patch('http://localhost:8080/orders/' + id, {
         status: 'TAKEN'
       })
     )
