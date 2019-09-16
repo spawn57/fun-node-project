@@ -100,3 +100,27 @@ When('I send a patch request with id {int} and status TAKEN', (id) => {
 Then('the status should be SUCCESS', () => {
   chai.expect(scope.response.data).to.eql({ status: 'SUCCESS' })
 })
+
+When('I send two patch requests with id {int} and status TAKEN', (id) => {
+  var promises = []
+  for (var i = 0; i < 2; i++) {
+    promises.push(
+      axios.patch('http://localhost:3000/orders/' + id, {
+        status: 'TAKEN'
+      })
+    )
+  }
+
+  return Promise.all(promises)
+    .then((responses) => {
+      // eslint-disable-next-line no-unused-expressions
+      chai.expect(responses).to.be.undefined
+    })
+    .catch((error) => {
+      scope.error = error
+    })
+})
+
+Then('one should succeed and the other should fail', () => {
+  chai.expect(scope.error.response.status).to.eql(400)
+})

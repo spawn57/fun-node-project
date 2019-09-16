@@ -21,6 +21,7 @@
     "axios": "^0.19.0",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
+    "mutex-promise": "^0.1.0",
     "mysql2": "^1.7.0",
     "sequelize": "^5.18.4",
     "winston": "^3.2.1"

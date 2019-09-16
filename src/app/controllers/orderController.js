@@ -6,6 +6,7 @@ const OrderService = require('../services/orderService')
 const util = require('util')
 const extraUtil = require('../util/extraUtil')
 const logger = require('../services/logService')
+const MutexPromise = require('mutex-promise')
 
 var OrderController = {}
 
@@ -84,14 +85,24 @@ OrderController.takeOrder = (request, response) => {
     return
   }
 
-  return OrderService.setTaken(id)
-    .then((order) => {
-      logger.info(util.format('order with {int} set to taken', id))
-      response.send({ status: 'SUCCESS' })
-    },
-    (error) => {
-      logger.error(util.format('could take order: %d: %s', id, error))
-      response.status(400).send({ error: error.message })
+  var mutex = new MutexPromise('takeOrder')
+  return mutex.promise()
+    .then((mutex) => {
+      mutex.lock()
+      logger.info(util.format('acquiring lock for taking order %d', id))
+      OrderService.setTaken(id)
+        .then((order) => {
+          logger.info(util.format('order with %d set to taken', id))
+          mutex.unlock()
+          logger.info(util.format('lock released for order %d', id))
+          response.send({ status: 'SUCCESS' })
+        },
+        (error) => {
+          logger.error(util.format('could take order: %d: %s', id, error))
+          mutex.unlock()
+          logger.info(util.format('lock released for order %d', id))
+          response.status(400).send({ error: error.message })
+        })
     })
 }
 

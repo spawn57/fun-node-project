@@ -34,10 +34,9 @@ OrderService.findAll = (
     })
 }
 
-OrderService.setTaken = (id) => {
+OrderService.setTaken = (orderId) => {
   return database.Orders.findAll(
-    { status: Order.STATUS_TAKEN },
-    { where: { id: id } }
+    { where: { id: orderId } }
   ).then((orders) => {
     if (orders.length === 0) {
       return Promise.reject(Error('order not found'))
